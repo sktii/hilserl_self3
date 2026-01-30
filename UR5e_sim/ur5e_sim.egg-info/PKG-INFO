@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: ur5e_sim
+Version: 0.0.1
+Requires-Python: >=3.8
+Dynamic: requires-python
