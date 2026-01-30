@@ -76,8 +76,8 @@ _UR5E_HOME = np.asarray([0, -1.57, 1.57, -1.57, -1.57, 0])
 
 _CARTESIAN_BOUNDS = np.asarray([[0.2, -0.3, 0], [0.6, 0.3, 0.5]])
 _SAMPLING_BOUNDS = np.asarray([[0.25, -0.25], [0.55, 0.25]])
-# User requested max obstacles = 64
-_MAX_OBSTACLES = 64
+# User requested max obstacles = 1024
+_MAX_OBSTACLES = 1024
 
 class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
     metadata = {"render_modes": ["rgb_array", "human"]}
@@ -609,7 +609,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
 
         # We assume there are roughly up to 4 pillars in the XML, but loop safely
         # Only ACTIVE pillars (index 1) are randomized. Others moved away.
-        for i in range(1, 5):
+        for i in range(1, _MAX_OBSTACLES + 1):
             name = f"pillar_cyl_{i}"
             body_id = mujoco.mj_name2id(self._model, mujoco.mjtObj.mjOBJ_GEOM, name)
             if body_id != -1:
@@ -631,7 +631,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
                 self._model.geom_solref[body_id] = np.array([0.005, 1])
                 self._model.geom_margin[body_id] = 0.005
 
-        for i in range(1, 5):
+        for i in range(1, _MAX_OBSTACLES + 1):
             name = f"pillar_box_{i}"
             body_id = mujoco.mj_name2id(self._model, mujoco.mjtObj.mjOBJ_GEOM, name)
             if body_id != -1:
