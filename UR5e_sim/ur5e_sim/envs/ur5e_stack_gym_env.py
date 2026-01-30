@@ -277,7 +277,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
                                 -np.inf, np.inf, shape=(1,), dtype=np.float32
                             ),
                             "obstacle_state": gymnasium_spaces.Box(
-                                -np.inf, np.inf, shape=(1536,), dtype=np.float32
+                                -np.inf, np.inf, shape=(384,), dtype=np.float32
                             ),
                         }
                     ),
@@ -1277,10 +1277,10 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         # Sort by distance
         active_obstacles.sort(key=lambda x: x['dist'])
 
-        # Take top 128
-        nearest = active_obstacles[:128]
+        # Take top 32
+        nearest = active_obstacles[:32]
 
-        # 3. Construct Feature Vector (1536 floats)
+        # 3. Construct Feature Vector (384 floats)
         obs_vec = []
         for obs_item in nearest:
             o_pos = obs_item['pos']
@@ -1297,8 +1297,8 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
 
         # Pad if needed
         # Each obstacle has 12 features (3+3+3+3)
-        # We want 128 obstacles, so total 1536 features
-        padding_count = 128 - len(nearest)
+        # We want 32 obstacles, so total 384 features
+        padding_count = 32 - len(nearest)
         if padding_count > 0:
             pad_vec = []
             # For relative vectors (pos), use large values (10.0) to signify "far away"
