@@ -277,7 +277,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
                                 -np.inf, np.inf, shape=(1,), dtype=np.float32
                             ),
                             "obstacle_state": gymnasium_spaces.Box(
-                                -np.inf, np.inf, shape=(24,), dtype=np.float32
+                                -np.inf, np.inf, shape=(120,), dtype=np.float32
                             ),
                         }
                     ),
@@ -1276,10 +1276,10 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         # Sort by distance
         active_obstacles.sort(key=lambda x: x['dist'])
 
-        # Take top 2
-        nearest = active_obstacles[:2]
+        # Take top 10
+        nearest = active_obstacles[:10]
 
-        # 3. Construct Feature Vector (24 floats)
+        # 3. Construct Feature Vector (120 floats)
         obs_vec = []
         for obs_item in nearest:
             o_pos = obs_item['pos']
@@ -1295,8 +1295,20 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
             obs_vec.extend(o_size)
 
         # Pad if needed
-        while len(obs_vec) < 24:
-            obs_vec.append(0.0)
+        # Each obstacle has 12 features (3+3+3+3)
+        # We want 10 obstacles, so total 120 features
+        padding_count = 10 - len(nearest)
+        if padding_count > 0:
+            pad_vec = []
+            # For relative vectors (pos), use large values (10.0) to signify "far away"
+            # v_tcp (3), v_elbow (3), v_shoulder (3)
+            pad_vec.extend([10.0] * 9)
+            # For size, use 0.0
+            pad_vec.extend([0.0] * 3)
+
+            # Extend for each missing obstacle
+            for _ in range(padding_count):
+                obs_vec.extend(pad_vec)
 
         obs["state"]["obstacle_state"] = np.array(obs_vec, dtype=np.float32)
 
