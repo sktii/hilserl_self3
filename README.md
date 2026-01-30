@@ -16,31 +16,6 @@ HIL-SERL is a system for training state of the art manipulation policies using R
 We first tele-operate the robot to collect positive and negative samples and train a binary reward classifier.
 We then collect a small set of demonstrations, which is added to the demo buffer at the start of RL training.
 During online training, we use the binary classifier as a sparse reward signal and provide human interventions. Initially, we provide more frequent interventions to demonstrate ways of solving the task from various states and prevent the robot from performing undesirable behavior. We gradually reduce the amount of interventions as the policy reaches higher success rate and faster cycle times.
-
-## Our main Contribution
-Our project extends the [hil-serl](https://hil-serl.github.io/) framework, which is designed for real-world robotic tasks using the Franka robot. The original implementation requires physical hardware and relies on neural networks to evaluate task success, making it challenging for developers to test and adapt the code for their specific needs. 
-
-By adapting the [SERL](https://github.com/rail-berkeley/serl) codebase, we created a lightweight simulation environment that allows developers to test and debug their implementations without needing physical hardware. Building on this, users can control the Franka robot via `keyboard`(not spacemouse) to collect small-scale pre-training data. Through iterative human-in-the-loop online reinforcement learning, the system achieves a 100% success rate for vision-based robotic grasping.
-
-This significantly lowers the barrier to entry, accelerates development, and makes the hil-serl framework more accessible to researchers and developers.
-
-
-
-## Results
-After 30000 steps of training and human's intervention(about 1 hours), our policy can achieve 100% of success in pick_cube_sim environment. The Here is our training curve and final policy out come.
-
-
-
-![](docs/images/trainig_curve.png)
-<div style="text-align:center;">Training Curve</div>
-
-
-
-![](docs/images/policy_performance.gif)
-<div style="text-align:center;">Policy Performance</div>
-
-
-
 ## Installation
 1. **Setup Conda Environment:**
     create an environment with
