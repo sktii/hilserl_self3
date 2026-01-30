@@ -1,0 +1,88 @@
+# Core AI & Computation
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+numpy==2.2.6
+ml_dtypes==0.5.4
+jax==0.6.2
+jaxlib==0.6.2
+jax-cuda12-pjrt==0.6.2
+jax-cuda12-plugin==0.6.2
+tensorflow==2.20.0
+tensorboard==2.20.0
+tf_keras==2.20.1
+flax==0.10.7
+optax==0.2.6
+orbax-checkpoint==0.11.31
+torch==2.3.0
+torchvision==0.18.0
+torchaudio==2.3.0
+
+# Simulation & Robotics
+mujoco==2.3.7
+gym==0.26.2
+gymnasium==0.29.1
+opencv-python==4.12.0.88
+imageio==2.37.2
+imageio-ffmpeg==0.6.0
+wandb==0.23.1
+opt_einsum==3.4.0
+agentlace @ git+https://github.com/youliangtan/agentlace.git@cf2c337c5e3694cdbfc14831b239bd657bc4894d
+
+# Dependencies from sub-projects (serl_launcher, franka_sim, etc.)
+distrax>=0.1.2
+ml_collections>=0.1.0
+tqdm>=4.60.0
+absl-py>=0.12.0
+tensorflow_probability>=0.23.0
+einops>=0.6.1
+moviepy>=1.0.3
+pre-commit==3.3.3
+pynput
+natsort
+matplotlib
+dm_env
+dm-robotics-transformations
+lxml
+pymodbus==2.5.3
+pyquaternion
+pyyaml
+rospkg
+scipy
+requests
+flask
+defusedxml
+ur_rtde
+
+# Other dependencies from original environment (maintained for completeness)
+aiofiles
+humanize
+msgpack
+simplejson
+treescope
+zipp
+etils
+nest_asyncio
+tensorstore
+importlib_resources
+
+# Real Robot / Hardware Control (ROS)
+# UNCOMMENT the following lines if you are running on a Real Robot with ROS installed.
+# Note: 'rospy', 'cv_bridge', etc. usually require a system ROS installation (e.g., Noetic)
+# and might not be installable via pip alone on non-ROS systems.
+# rospy
+# actionlib
+# cv-bridge
+# sensor-msgs
+# geometry-msgs
+# message-filters
+# tf2-ros
+# pyrealsense2
+# pyspacemouse
+# hidapi
+# easyhid
+
+# Local Packages
+-e ./serl_launcher
+-e ./serl_robot_infra
+-e ./UR5e_sim
+-e ./franka_sim
