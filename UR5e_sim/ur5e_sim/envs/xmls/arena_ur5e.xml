@@ -42,10 +42,36 @@
     <!-- Obstacles (Pillars) -->
     <geom name="pillar_cyl_1" type="cylinder" size="0.02 0.2" pos="0.4 0.1 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
     <geom name="pillar_cyl_2" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_3" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_4" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_5" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_6" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_7" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_8" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_9" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_10" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_11" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_12" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_13" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_14" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_15" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_16" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_17" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_18" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_19" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_cyl_20" type="cylinder" size="0.02 0.2" pos="0.4 0.3 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
 
     <!-- Obstacles (Box Pillars) -->
     <geom name="pillar_box_1" type="box" size="0.02 0.02 0.2" pos="0.45 0.15 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
     <geom name="pillar_box_2" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_3" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_4" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_5" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_6" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_7" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_8" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_9" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <geom name="pillar_box_10" type="box" size="0.02 0.02 0.2" pos="0.45 0.35 0.2" rgba="0.5 0.5 0.5 1" contype="1" conaffinity="1" solimp="0.95 0.99 0.001" solref="0.005 1"/>
 
   </worldbody>
 
