@@ -277,7 +277,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
                                 -np.inf, np.inf, shape=(1,), dtype=np.float32
                             ),
                             "obstacle_state": gymnasium_spaces.Box(
-                                -np.inf, np.inf, shape=(120,), dtype=np.float32
+                                -np.inf, np.inf, shape=(1536,), dtype=np.float32
                             ),
                         }
                     ),
@@ -1250,9 +1250,10 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         active_obstacles = []
         for gid, ptype in self._pillar_info:
             obs_pos = self._model.geom_pos[gid]
+            # [Updated] Include ALL obstacles (even far away ones)
             # Skip inactive (far away)
-            if obs_pos[0] > 5.0:
-                continue
+            # if obs_pos[0] > 5.0:
+            #     continue
 
             # Distance to TCP for sorting
             d_tcp = np.linalg.norm(obs_pos - p_tcp)
@@ -1276,10 +1277,10 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         # Sort by distance
         active_obstacles.sort(key=lambda x: x['dist'])
 
-        # Take top 10
-        nearest = active_obstacles[:10]
+        # Take top 128
+        nearest = active_obstacles[:128]
 
-        # 3. Construct Feature Vector (120 floats)
+        # 3. Construct Feature Vector (1536 floats)
         obs_vec = []
         for obs_item in nearest:
             o_pos = obs_item['pos']
@@ -1296,8 +1297,8 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
 
         # Pad if needed
         # Each obstacle has 12 features (3+3+3+3)
-        # We want 10 obstacles, so total 120 features
-        padding_count = 10 - len(nearest)
+        # We want 128 obstacles, so total 1536 features
+        padding_count = 128 - len(nearest)
         if padding_count > 0:
             pad_vec = []
             # For relative vectors (pos), use large values (10.0) to signify "far away"
