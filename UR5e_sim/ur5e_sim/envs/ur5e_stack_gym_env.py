@@ -92,6 +92,8 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         "move": 0.25,
         "place_down": 0.5, # Extra
         "release": 0.5,    # Extra
+        "fine_place": 0.025, # Extra: Encourages centering
+        "gentle_place": 0.025, # Extra: Encourages low velocity (anti-throw)
         "grasp_bonus": 10.0,
         "lift_bonus": 5.0,
         "move_bonus": 10.0,
@@ -1336,6 +1338,8 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         # New Potentials for Place
         phi_place_down = 0.0
         phi_release = 0.0
+        phi_fine_place = 0.0
+        phi_gentle_place = 0.0
 
         # If placed, we force maximal potentials to represent "Task Complete"
         # However, "is_placed" (legacy) might just mean "Aligned & Above".
@@ -1346,6 +1350,11 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
 
         # Check if actually "Down" (close to surface)
         is_actually_down = is_placed and (dist_down < 0.02)
+
+        # Common calc for fine/gentle
+        dist_xy_target = np.linalg.norm(block_pos[:2] - target_pos[:2])
+        block_vel = self._data.jnt("block").qvel[:3]
+        vel_norm = np.linalg.norm(block_vel)
 
         if is_placed:
             phi_reach = 1.0
@@ -1365,6 +1374,16 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
                 phi_release = 0.0
 
             effective_grasp = 1.0 # Considered "grasped" in terms of previous stages being done
+
+            # [NEW] Fine Place: Reward precise centering
+            # If is_placed, we are already < 0.04 XY dist. Boost reward as we get closer to 0.
+            phi_fine_place = np.exp(-100.0 * dist_xy_target)
+
+            # [NEW] Gentle Place: Reward low velocity (anti-throw)
+            # Only relevant if we are releasing or already placed.
+            # Velocity should be near zero.
+            phi_gentle_place = np.exp(-10.0 * vel_norm)
+
         else:
             effective_grasp = 1.0 if is_grasped else 0.0
             phi_move = 0.0
@@ -1397,20 +1416,34 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
                          # Potential = 1.0 when dist_down is 0.
                          phi_place_down = np.exp(-10.0 * dist_down)
 
+                         # [NEW] Fine Place: Reward precise centering even during approach
+                         phi_fine_place = np.exp(-50.0 * dist_xy_target)
+
+                         # [NEW] Gentle Place: Reward low velocity near target surface
+                         # Only apply if close to surface to discourage slamming
+                         if dist_down < 0.05:
+                             phi_gentle_place = np.exp(-5.0 * vel_norm)
+
         # Mask potentials based on curriculum stage
         if self.task_stage == "grasp":
             phi_lift = 0.0
             phi_move = 0.0
             phi_place_down = 0.0
             phi_release = 0.0
+            phi_fine_place = 0.0
+            phi_gentle_place = 0.0
         elif self.task_stage == "lift":
             phi_move = 0.0
             phi_place_down = 0.0
             phi_release = 0.0
+            phi_fine_place = 0.0
+            phi_gentle_place = 0.0
         elif self.task_stage == "grasp_lift":
             phi_move = 0.0
             phi_place_down = 0.0
             phi_release = 0.0
+            phi_fine_place = 0.0
+            phi_gentle_place = 0.0
         elif self.task_stage == "move":
             # Move implies we stop after moving, so maybe down/release not needed?
             # User request specifically for "place", assuming "full" or "place" stage.
@@ -1423,6 +1456,8 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         w_move = self.REWARD_WEIGHTS["move"]
         w_place_down = self.REWARD_WEIGHTS["place_down"]
         w_release = self.REWARD_WEIGHTS["release"]
+        w_fine = self.REWARD_WEIGHTS.get("fine_place", 0.025)
+        w_gentle = self.REWARD_WEIGHTS.get("gentle_place", 0.025)
 
         # Note: phi_place_down and phi_release are gated effectively by the sequence logic above.
         # phi_place_down is only non-zero if dist_move < 0.05 (and grasped).
@@ -1434,6 +1469,11 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         # Down requires grasp. Release requires placed (which might technically be ungrasped, but logic handles it).
 
         extra_potential = effective_grasp * w_place_down * phi_place_down + w_release * phi_release
+
+        # Add new Fine/Gentle potentials
+        # Gated effectively by being near target (non-zero phi calculation above)
+        # We apply them broadly if calculated, but mostly they are 0.0 unless near target.
+        extra_potential += w_fine * phi_fine_place + w_gentle * phi_gentle_place
 
         potential = base_potential + extra_potential
 
