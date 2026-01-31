@@ -1056,7 +1056,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
             info["success_rate"] = success_rate
 
             # Breakdown: Scale potentials by POTENTIAL_SCALE (100.0)
-            p_reach, p_grasp, p_lift, p_move, p_down, p_release = self._latest_potentials
+            p_reach, p_grasp, p_lift, p_move, p_down, p_release, p_fine, p_gentle = self._latest_potentials
 
             # Dynamic max potential calculation for display
             w = self.REWARD_WEIGHTS
@@ -1071,6 +1071,8 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
             print(f"  Move:    {p_move * scale:.2f} / {w['move'] * scale:.2f}")
             print(f"  Down:    {p_down * scale:.2f} / {w['place_down'] * scale:.2f}")
             print(f"  Release: {p_release * scale:.2f} / {w['release'] * scale:.2f}")
+            print(f"  Fine:    {p_fine * scale:.2f} / {w['fine_place'] * scale:.2f}")
+            print(f"  Gentle:  {p_gentle * scale:.2f} / {w['gentle_place'] * scale:.2f}")
 
             success_str = f"Success: {info['succeed']}"
             if info["succeed"]:
@@ -1456,8 +1458,8 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         w_move = self.REWARD_WEIGHTS["move"]
         w_place_down = self.REWARD_WEIGHTS["place_down"]
         w_release = self.REWARD_WEIGHTS["release"]
-        w_fine = self.REWARD_WEIGHTS.get("fine_place", 0.025)
-        w_gentle = self.REWARD_WEIGHTS.get("gentle_place", 0.025)
+        w_fine = self.REWARD_WEIGHTS["fine_place"]
+        w_gentle = self.REWARD_WEIGHTS["gentle_place"]
 
         # Note: phi_place_down and phi_release are gated effectively by the sequence logic above.
         # phi_place_down is only non-zero if dist_move < 0.05 (and grasped).
@@ -1477,7 +1479,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
 
         potential = base_potential + extra_potential
 
-        return potential, (w_reach * phi_reach, effective_grasp * w_grasp, effective_grasp * w_lift * phi_lift, effective_grasp * w_move * phi_move, effective_grasp * w_place_down * phi_place_down, w_release * phi_release)
+        return potential, (w_reach * phi_reach, effective_grasp * w_grasp, effective_grasp * w_lift * phi_lift, effective_grasp * w_move * phi_move, effective_grasp * w_place_down * phi_place_down, w_release * phi_release, w_fine * phi_fine_place, w_gentle * phi_gentle_place)
 
     def _compute_reward(self, collision_count) -> float:
         block_pos = self._data.sensor("block_pos").data
