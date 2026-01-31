@@ -94,6 +94,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         "release": 0.5,    # Extra
         "fine_place": 0.025, # Extra: Encourages centering
         "gentle_place": 0.025, # Extra: Encourages low velocity (anti-throw)
+        "collision_avoid": 0.05, # Sparse: Episode-end bonus if never collided
         "grasp_bonus": 10.0,
         "lift_bonus": 5.0,
         "move_bonus": 10.0,
@@ -177,6 +178,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
         # Initialize state variables
         self._z_init = 0.0
         self._floor_collision = False
+        self._has_collided = False
 
         # Find physical gripper joint for accurate state reading
         # Typically "robot0:2f85:right_driver_joint" for Robotiq 2F-85
@@ -526,6 +528,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
              # Don't reset _prev_potential here, use the loaded one
 
         self._floor_collision = False
+        self._has_collided = False
         self.env_step = 0
         self.success_counter = 0
         self._grasp_duration_counter = 0
@@ -819,6 +822,7 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
             c_check = self._check_collision()
             if c_check > 0:
                 collision_count = c_check
+                self._has_collided = True
                 break
 
         obs = self._compute_observation()
@@ -1041,6 +1045,13 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
             info["succeed"] = True
             terminated = True
 
+        if terminated:
+            # Sparse Reward: Collision Avoidance Bonus
+            if not self._has_collided:
+                bonus = self.REWARD_WEIGHTS["collision_avoid"] * self.POTENTIAL_SCALE
+                rew += bonus
+                # print(f"Collision Free Bonus: +{bonus}")
+
         # [Fix] Update episode reward BEFORE saving state
         # This ensures the saved file includes the final success bonus (+20.0)
         self.episode_reward += rew
@@ -1073,6 +1084,10 @@ class UR5eStackCubeGymEnv(MujocoGymEnv, gymnasium.Env):
             print(f"  Release: {p_release * scale:.2f} / {w['release'] * scale:.2f}")
             print(f"  Fine:    {p_fine * scale:.2f} / {w['fine_place'] * scale:.2f}")
             print(f"  Gentle:  {p_gentle * scale:.2f} / {w['gentle_place'] * scale:.2f}")
+
+            coll_bonus = self.REWARD_WEIGHTS["collision_avoid"] * self.POTENTIAL_SCALE if not self._has_collided else 0.0
+            max_coll = self.REWARD_WEIGHTS["collision_avoid"] * self.POTENTIAL_SCALE
+            print(f"  NoColl:  {coll_bonus:.2f} / {max_coll:.2f}")
 
             success_str = f"Success: {info['succeed']}"
             if info["succeed"]:
